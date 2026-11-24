@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fieldnote 01 — AI & Manufacturing</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --paper: #eee9df;
+  --ink: #22241f;
+  --orange: #d45a30;
+  --green: #526b52;
+  --muted: #77776f;
+  --line: #cbc5bb;
+  --white: #f8f5ef;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+}
+a { color:inherit; text-decoration:none; }
+button { font-family:inherit; }
+.wrap { width:90%; max-width:1280px; margin:auto; }
+.mono { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; }
+.topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 0; border-bottom:1px solid var(--line);
+}
+.brand { font-family:'Space Grotesk'; font-weight:700; font-size:20px; letter-spacing:-1px; }
+.brand em { color:var(--orange); font-style:normal; }
+.nav { display:flex; gap:26px; align-items:center; font-size:13px; }
+.nav a:hover { color:var(--orange); }
+.nav-cta {
+  background:var(--ink); color:var(--paper); padding:11px 16px;
+}
+.hero { padding:62px 0 48px; }
+.eyebrow { display:flex; gap:10px; align-items:center; color:var(--green); }
+.eyebrow:before { content:""; width:25px; height:1px; background:var(--green); }
+.hero h1 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(48px,8vw,110px);
+  line-height:.98; letter-spacing:-6px;
+  margin:35px 0 30px;
+  text-transform:uppercase;
+}
+.hero h1 .orange { color:var(--orange); }
+.hero h1 .indent { display:block; margin-left:9%;
+}
+.hero-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:45px; align-items:end;
+}
+.hero-copy { max-width:430px; font-size:17px; line-height:1.8; }
+.hero-copy strong { font-weight:700; }
+.hero-bottom {
+  display:flex; justify-content:space-between; align-items:end;
+  margin-top:40px; gap:20px; flex-wrap:wrap;
+}
+.event-details { display:flex; gap:28px; flex-wrap:wrap; }
+.detail { font-size:12px; color:var(--muted); }
+.detail b { display:block; color:var(--ink); margin-top:5px; font-size:14px; }
+.btn {
+  display:inline-block; background:var(--orange); color:#fff;
+  padding:15px 22px; font-size:13px; font-weight:700;
+  border:none; cursor:pointer; transition:.2s;
+}
+.btn:hover { background:#ad4423; transform:translateY(-2px); }
+.btn-dark { background:var(--ink); }
+.btn-dark:hover { background:var(--green); }
+
+.hero-art {
+  min-height:420px; background:#dcd6ca; position:relative;
+  overflow:hidden; border:1px solid var(--line);
+}
+.art-label {
+  position:absolute; top:17px; left:18px; z-index:2; color:var(--green);
+}
+.art-label-right {
+  position:absolute; top:17px; right:18px; z-index:2; color:var(--muted);
+}
+.hero-art svg { width:100%; height:100%; position:absolute; inset:0; }
+.art-caption {
+  position:absolute; bottom:15px; left:18px;
+  background:var(--paper); padding:8px 11px; color:var(--ink);
+}
+.hero-art .pulse { animation:pulse 2s infinite; transform-origin:center; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.marquee {
+  background:var(--ink); color:var(--paper); overflow:hidden;
+  padding:14px 0; white-space:nowrap;
+}
+.marquee-inner {
+  display:inline-flex; gap:45px;
+  animation:move 24s linear infinite;
+}
+.marquee span { font-family:'Space Grotesk'; font-size:15px; letter-spacing:1px; }
+.marquee i { color:var(--orange); font-style:normal; }
+@keyframes move { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+.section { padding:90px 0; }
+.section-head {
+  display:grid; grid-template-columns:180px 1fr;
+  gap:30px; margin-bottom:45px;
+}
+.section-number { color:var(--orange); padding-top:10px; }
+.section-head h2 {
+  font-family:'Space Grotesk'; font-size:clamp(32px,5vw,60px);
+  line-height:1.08; letter-spacing:-2px;
+}
+.section-head p { max-width:500px; color:var(--muted); margin-top:17px; line-height:1.7; }
+.benefits {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);
+}
+.benefit {
+  padding:25px 24px 30px 0; border-bottom:1px solid var(--line);
+}
+.benefit:nth-child(3n+2), .benefit:nth-child(3n+3) { padding-left:24px; }
+.benefit:not(:nth-child(3n)) { border-right:1px solid var(--line); }
+.benefit .n { color:var(--orange); margin-bottom:35px; }
+.benefit h3 { font-family:'Space Grotesk'; font-size:23px; margin-bottom:12px; }
+.benefit p { color:var(--muted); font-size:14px; line-height:1.8; max-width:330px; }
+
+.dark-section { background:var(--ink); color:var(--paper); }
+.dark-section .section-number { color:#e58a63; }
+.dark-section .section-head p { color:#a9aaa1; }
+.timeline { border-top:1px solid #494a42; }
+.timeline-row {
+  display:grid; grid-template-columns:170px 1fr;
+  gap:30px; padding:25px 0; border-bottom:1px solid #494a42;
+}
+.timeline-row .time { color:#e58a63; }
+.timeline-row h3 { font-family:'Space Grotesk'; font-size:23px; margin-bottom:7px; }
+.timeline-row p { color:#a9aaa1; font-size:14px; max-width:600px; line-height:1.7; }
+
+.speaker {
+  display:grid; grid-template-columns:.8fr 1.2fr; gap:60px; align-items:center;
+}
+.speaker-art {
+  min-height:350px; background:var(--green); position:relative;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.speaker-art .circle {
+  border:1px solid rgba(255,255,255,.4); border-radius:50%;
+  width:230px; height:230px; position:absolute;
+}
+.speaker-art .circle:before,.speaker-art .circle:after {
+  content:""; position:absolute; border:1px solid rgba(255,255,255,.3);
+  border-radius:50%; inset:25px;
+}
+.speaker-art .circle:after { inset:50px; }
+.speaker-art .cross {
+  position:absolute; height:1px; width:100%; background:rgba(255,255,255,.3);
+}
+.speaker-art .cross.vertical { height:100%; width:1px; }
+.speaker-art .speaker-symbol {
+  font-family:'Space Grotesk'; font-size:65px; color:#f4f0e8; z-index:2;
+}
+.speaker-copy h2 {
+  font-family:'Space Grotesk'; font-size:40px; letter-spacing:-2px;
+}
+.speaker-copy .role { color:var(--orange); margin:7px 0 20px; font-size:13px; }
+.speaker-copy p { color:var(--muted); line-height:1.8; font-size:15px; }
+.speaker-copy .mono { display:block; margin-bottom:12px; color:var(--green); }
+
+.registration {
+  background:#dcd6ca; padding:65px 7%; position:relative; overflow:hidden;
+}
+.registration:after {
+  content:"01"; position:absolute; right:-30px; top:-90px;
+  font-family:'Space Grotesk'; font-size:350px;
+  font-weight:700; color:rgba(34,36,31,.04);
+}
+.reg-grid { display:grid; grid-template-columns:1fr .8fr; gap:60px; position:relative; z-index:2; }
+.registration h2 {
+  font-family:'Space Grotesk'; font-size:clamp(40px,6vw,75px);
+  line-height:1; letter-spacing:-4px; margin:20px 0;
+}
+.registration p { color:var(--muted); max-width:500px; line-height:1.7; }
+.price { font-family:'Space Grotesk'; font-size:55px; margin:20px 0; }
+.price small { font-size:14px; font-family:'DM Sans'; color:var(--muted); }
+.form { background:var(--paper); padding:28px; border:1px solid var(--line); }
+.form label { font-size:12px; display:block; margin:14px 0 6px; }
+.form input {
+  width:100%; padding:13px; border:1px solid var(--line);
+  background:transparent; font-family:inherit; outline:none;
+}
+.form input:focus { border-color:var(--orange); }
+.form button { margin-top:18px; width:100%; }
+.form .small { font-size:11px; margin-top:12px; }
+
+footer { padding:23px 0; background:var(--ink); color:#c8c6bc; }
+.footer-row { display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; }
+footer .brand { color:var(--paper); }
+
+.modal {
+  display:none; position:fixed; inset:0; z-index:99;
+  background:rgba(20,22,19,.75); align-items:center; justify-content:center; padding:20px;
+}
+.modal.show { display:flex; }
+.modal-box {
+  background:var(--paper); color:var(--ink); max-width:440px;
+  width:100%; padding:35px; position:relative;
+}
+.modal-box h3 { font-family:'Space Grotesk'; font-size:30px; }
+.modal-box p { color:var(--muted); margin:12px 0 20px; }
+.close { position:absolute; right:15px; top:15px; border:0; background:none; font-size:24px; cursor:pointer; }
+@media(max-width:800px) {
+  .hero-grid,.reg-grid,.speaker { grid-template-columns:1fr; }
+  .hero h1 { letter-spacing:-3px; }
+  .hero h1 .indent { margin-left:0; }
+  .hero-art { min-height:330px; }
+  .section-head { grid-template-columns:1fr; gap:10px; }
+  .speaker { gap:25px; }
+  .speaker-art { min-height:260px; }
+}
+@media(max-width:600px) {
+  .nav a:not(.nav-cta) { display:none; }
+  .benefits { grid-template-columns:1fr; }
+  .benefit,.benefit:nth-child(3n+2),.benefit:nth-child(3n+3) {
+    padding:22px 0; border-right:0;
+  }
+  .timeline-row { grid-template-columns:1fr; gap:10px; }
+  .registration { padding:45px 6%; }
+  .registration h2 { letter-spacing:-2px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+<header class="topbar">
+  <a href="#" class="brand">FIELDNOTE<em> / 01</em></a>
+  <nav class="nav">
+    <a href="#insights">The Brief</a>
+    <a href="#agenda">Schedule</a>
+    <a href="#speaker">Contributor</a>
+    <a href="#register" class="nav-cta">Reserve a seat ↗</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow mono">AN INDUSTRY INTELLIGENCE SESSION · VOL. 01</div>
+  <h1>
+    YOUR FACTORY<br>
+    IS PRODUCING DATA.
+    <span class="indent orange">IS IT PRODUCING</span>
+    <span class="orange">INTELLIGENCE?</span>
+  </h1>
+
+  <div class="hero-grid">
+    <div class="hero-copy">
+      Manufacturing doesn't need another buzzword.
+      It needs <strong>less downtime, fewer defects and smarter decisions.</strong>
+      <br><br>
+      A practical 90-minute exploration of where artificial intelligence is changing the production floor — and where to begin.
+    </div>
+    <div class="hero-art">
+      <div class="art-label mono">FIG. 01 — PRODUCTION INTELLIGENCE</div>
+      <div class="art-label-right mono">AI / SYSTEM MAP</div>
+      <svg viewBox="0 0 600 420" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse">
+            <path d="M25 0H0V25" fill="none" stroke="#a5aa9e" stroke-width=".5" opacity=".45"/>
+          </pattern>
+        </defs>
+        <rect width="600" height="420" fill="url(#grid)"/>
+        <g stroke="#526b52" stroke-width="1" fill="none">
+          <rect x="105" y="100" width="390" height="225"/>
+          <rect x="130" y="125" width="115" height="175"/>
+          <rect x="260" y="125" width="210" height="175"/>
+          <path d="M105 80V60H150 M495 345V365H455"/>
+          <path d="M245 210H260 M360 125V300"/>
+          <path d="M130 160H245 M130 250H245"/>
+          <circle cx="190" cy="200" r="42"/>
+          <circle cx="190" cy="200" r="26"/>
+          <circle cx="190" cy="200" r="8" fill="#526b52"/>
+          <path d="M318 160L400 160L420 185L400 210L318 210Z"/>
+          <path d="M318 235H420V275H318Z"/>
+          <path d="M318 235L350 210 M400 235L420 210"/>
+          <path d="M130 325V345H245V325"/>
+        </g>
+        <g stroke="#d45a30" stroke-width="2" fill="none">
+          <circle class="pulse" cx="190" cy="200" r="60" stroke-dasharray="5 7"/>
+          <path d="M190 140V90H305"/>
+          <path d="M420 185H510V110"/>
+          <circle cx="305" cy="90" r="4" fill="#d45a30"/>
+          <circle cx="510" cy="110" r="4" fill="#d45a30"/>
+        </g>
+        <g fill="#d45a30" font-family="DM Mono" font-size="11">
+          <text x="315" y="80">SENSOR / 01</text>
+          <text x="430" y="175">LIVE ANALYTICS</text>
+        </g>
+        <g fill="#526b52" font-family="DM Mono" font-size="10">
+          <text x="135" y="115">INPUT</text>
+          <text x="275" y="115">PROCESSING</text>
+          <text x="135" y="290">MACHINE A</text>
+          <text x="275" y="290">DATA FLOW / ACTIVE</text>
+        </g>
+      </svg>
+      <div class="art-caption mono">A production line, reimagined.</div>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="event-details">
+      <div class="detail mono">DATE<b>12 DEC 2026</b></div>
+      <div class="detail mono">TIME<b>10:00 AM IST</b></div>
+      <div class="detail mono">FORMAT<b>LIVE · ONLINE</b></div>
+      <div class="detail mono">DURATION<b>90 MINUTES</b></div>
+    </div>
+    <a href="#register" class="btn">I'M IN — SAVE MY SEAT ↗</a>
+  </div>
+</section>
+</div>
+
+<div class="marquee">
+  <div class="marquee-inner">
+    <span>LESS DOWNTIME <i>✳</i></span><span>BETTER QUALITY <i>✳</i></span>
+    <span>SMARTER OPERATIONS <i>✳</i></span><span>HUMAN + MACHINE <i>✳</i></span>
+    <span>LESS DOWNTIME <i>✳</i></span><span>BETTER QUALITY <i>✳</i></span>
+    <span>SMARTER OPERATIONS <i>✳</i></span><span>HUMAN + MACHINE <i>✳</i></span>
+  </div>
+</div>
+
+<section class="section" id="insights">
+<div class="wrap">
+  <div class="section-head">
+    <div class="section-number mono">[ 01 — THE BRIEF ]</div>
+    <div>
+      <h2>Forget the hype.<br>Look at the floor.</h2>
+      <p>AI is only valuable when it solves a real production problem. Here's what we'll unpack — through the lens of people, processes and performance.</p>
+    </div>
+  </div>
+
+  <div class="benefits">
+    <div class="benefit">
+      <div class="n mono">01 / BEFORE IT BREAKS</div>
+      <h3>Predict the failure.</h3>
+      <p>Learn how machine signals and historical data can flag potential failures before they disrupt a shift.</p>
+    </div>
+    <div class="benefit">
+      <div class="n mono">02 / BEFORE IT SHIPS</div>
+      <h3>Catch the defect.</h3>
+      <p>Explore visual AI inspection that helps spot inconsistencies, defects and quality issues earlier.</p>
+    </div>
+    <div class="benefit">
+      <div class="n mono">03 / WHILE IT RUNS</div>
+      <h3>Optimize the line.</h3>
+      <p>Understand how AI can help production teams improve throughput, scheduling and efficiency.</p>
+    </div>
+    <div class="benefit">
+      <div class="n mono">04 / BEHIND THE NUMBERS</div>
+      <h3>Make data useful.</h3>
+      <p>Connect fragmented production data with insights that help teams make faster decisions.</p>
+    </div>
+    <div class="benefit">
+      <div class="n mono">05 / BEYOND THE WASTE</div>
+      <h3>Use less. Do more.</h3>
+      <p>Discover opportunities for smarter energy consumption, reduced waste and better resource planning.</p>
+    </div>
+    <div class="benefit">
+      <div class="n mono">06 / THE FIRST STEP</div>
+      <h3>Start small. Scale smart.</h3>
+      <p>Build a realistic starting point for AI adoption — without replacing your entire operation overnight.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section dark-section" id="agenda">
+<div class="wrap">
+  <div class="section-head">
+    <div class="section-number mono">[ 02 — THE RUN OF SHOW ]</div>
+    <div>
+      <h2>90 minutes.<br>Zero filler.</h2>
+      <p>One session. A clear path from understanding the opportunity to identifying your first practical use case.</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-row">
+      <div class="time mono">10:00 — 10:10</div>
+      <div><h3>Setting the scene</h3><p>Why AI is becoming part of the modern factory — and what's actually changed.</p></div>
+    </div>
+    <div class="timeline-row">
+      <div class="time mono">10:10 — 10:30</div>
+      <div><h3>Where AI meets the floor</h3><p>Predictive maintenance, quality inspection and production intelligence in practical terms.</p></div>
+    </div>
+    <div class="timeline-row">
+      <div class="time mono">10:30 — 10:50</div>
+      <div><h3>From data to decisions</h3><p>Walk through real-world inspired scenarios, potential benefits and common pitfalls.</p></div>
+    </div>
+    <div class="timeline-row">
+      <div class="time mono">10:50 — 11:10</div>
+      <div><h3>Your adoption blueprint</h3><p>Data readiness, choosing a pilot, measuring success and scaling responsibly.</p></div>
+    </div>
+    <div class="timeline-row">
+      <div class="time mono">11:10 — 11:30</div>
+      <div><h3>Open floor</h3><p>Questions, discussion and an honest conversation about implementing AI.</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="speaker">
+<div class="wrap">
+  <div class="section-head">
+    <div class="section-number mono">[ 03 — THE CONTRIBUTOR ]</div>
+    <div><h2>Technology is easy.<br>Transformation is human.</h2></div>
+  </div>
+
+  <div class="speaker">
+    <div class="speaker-art">
+      <div class="cross"></div><div class="cross vertical"></div>
+      <div class="circle"></div><div class="speaker-symbol">AM</div>
+    </div>
+    <div class="speaker-copy">
+      <span class="mono">GUEST EXPERT / INDUSTRIAL AI</span>
+      <h2>Arjun Mehta</h2>
+      <div class="role">Industrial AI Consultant & Smart Manufacturing Strategist</div>
+      <p>Arjun works at the intersection of manufacturing operations, data analytics and intelligent automation. His approach focuses on translating emerging AI capabilities into practical solutions for production environments.</p>
+      <p style="margin-top:12px">This session is built around a simple question: how do you make AI useful to the people who keep a factory running?</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="registration" id="register">
+<div class="reg-grid">
+  <div>
+    <div class="eyebrow mono">[ 04 — YOUR NEXT MOVE ]</div>
+    <h2>Don't just<br>watch industry<br>change.</h2>
+    <p>Understand it. Get a seat at the conversation and take away a framework you can bring to your team.</p>
+    <div class="price">₹499 <small>per attendee</small></div>
+    <div class="mono" style="color:#526b52">12 DECEMBER 2026 · 10 AM IST</div>
+  </div>
+
+  <div class="form">
+    <div class="mono" style="color:#d45a30">REGISTRATION / 01</div>
+    <h3 style="font-family:'Space Grotesk';font-size:25px;margin-top:8px">Reserve your seat.</h3>
+    <form id="regForm">
+      <label>FULL NAME</label>
+      <input type="text" id="fullName" placeholder="Enter your name" required>
+      <label>EMAIL ADDRESS</label>
+      <input type="email" id="email" placeholder="you@company.com" required>
+      <label>COMPANY / ROLE</label>
+      <input type="text" id="company" placeholder="Where you work">
+      <button class="btn btn-dark" type="submit">CONFIRM MY INTEREST ↗</button>
+      <p class="small">Demo experience — no payment is processed or personal data stored.</p>
+    </form>
+  </div>
+</div>
+</section>
+
+<footer>
+<div class="wrap footer-row">
+  <div class="brand">FIELDNOTE<em> / 01</em></div>
+  <div class="mono">AN INDUSTRY INTELLIGENCE SESSION</div>
+  <div class="mono">CONCEPT WEBINAR · 2026</div>
+</div>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="close" id="closeModal">&times;</button>
+    <div class="mono" style="color:#526b52">REGISTRATION / RECEIVED</div>
+    <h3>You're on the list.</h3>
+    <p id="successMessage">Thanks for your interest. This demo form does not save personal details or process payments.</p>
+    <button class="btn btn-dark" id="okButton">BACK TO THE PAGE</button>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('regForm');
+const modal = document.getElementById('modal');
+const successMessage = document.getElementById('successMessage');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('fullName').value.trim();
+  successMessage.textContent =
+    `Thank you, ${name}! Your demo registration has been received. No personal data has been stored and no payment was taken.`;
+  modal.classList.add('show');
+  form.reset();
+});
+
+document.getElementById('closeModal').onclick = () => modal.classList.remove('show');
+document.getElementById('okButton').onclick = () => modal.classList.remove('show');
+modal.addEventListener('click', e => {
+  if(e.target === modal) modal.classList.remove('show');
+});
+</script>
+</body>
+</html>
